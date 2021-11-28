@@ -4,6 +4,7 @@ require_once 'Model/Alumnos.php';
 require_once 'Model/Grados.php';
 require_once 'Model/Secciones.php';
 require_once 'Model/Usuarios.php';
+require_once 'Model/Direcciones.php';
 
 class AlumnosController{
     // para accender al modelo y sus atributos
@@ -11,6 +12,7 @@ class AlumnosController{
     private $modelgrado;
     private $modelseccion;
     private $modeluser;
+    private $diremodel;
 
     // Constructos
     public function __CONSTRUCT(){
@@ -18,6 +20,7 @@ class AlumnosController{
         $this->modelseccion = new Secciones();
         $this->modelgrado = new Grados();
         $this->modeluser = new Usuarios();
+        $this->diremodel = new Direcciones();
     }
 
    /** Inicio de llamado de la vistas */
@@ -28,6 +31,7 @@ class AlumnosController{
     }
     public function Nuevo(){
         $id = $_REQUEST['id'];
+        $zona = $_REQUEST['zona'];
         require_once 'views/backend/header.php';
         require_once 'views/backend/alumnos/crear.php';
         require_once 'views/backend/footer.php';
@@ -62,21 +66,33 @@ class AlumnosController{
         $this->model->seccionid = $_REQUEST['seccionid'];
         $this->model->gradoid = $_REQUEST['gradoid'];
         $this->model->gradoid = $_REQUEST['gradoid'];
-        
 
-            $this->modeluser->usuario     = $_REQUEST['nombres'];
-            $this->modeluser->email       = $_REQUEST['email'];
-            $this->modeluser->pass        = $_REQUEST['pass'];
-
+        $this->modeluser->usuario     = $_REQUEST['nombres'];
+        $this->modeluser->email       = $_REQUEST['email'];
+        $this->modeluser->pass        = $_REQUEST['pass'];
+ 
 
          // utilizamos el metodo de guardar de SQL
          $res = $this->model->Registrar($this->model);
         if($res){
             $this->modeluser->alumnoid  = $res;
-            if($this->modeluser->RegistrarAlumno($this->modeluser)){
-                $texto = "Registro exitosamente";
-                $tipo = "success";
-                $this->model->SesionesMessage($texto, $tipo);
+            $resuuser = $this->modeluser->RegistrarAlumno($this->modeluser);
+            if($resuuser){
+           
+
+                $this->diremodel->direccion = "-";
+                $this->diremodel->telefono = "-";
+                $this->diremodel->usuarioid = $resuuser;
+                $this->diremodel->zona = $_REQUEST['zona'];
+                if($this->diremodel->Registrar($this->diremodel)){
+                    $texto = "Registro exitosamente";
+                    $tipo = "success";
+                    $this->model->SesionesMessage($texto, $tipo);
+                } else{
+                    $texto = "Ocurrio un error";
+                    $tipo = "error";
+                    $this->model->SesionesMessage($texto, $tipo);
+                }
             }else {
                 $texto = "Ocurrio un error";
                 $tipo = "error";

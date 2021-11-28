@@ -46,8 +46,13 @@ class Usuarios{
            // COMENZAMOS LA CONEXION CON PDO
            $pre = $this->DB->prepare($sql);
            $resul = $pre->execute(array($data->usuario, $data->email, $passEncrypt, $data->alumnoid));
+           $temp = $pre->fetch(PDO::FETCH_ASSOC);
+           $idRespuesta=0;
+           foreach ($temp as $key => $value) {
+               $idRespuesta = $value;
+           }
            if($resul > 0){ 
-               return true;
+               return $idRespuesta;
            }else{ 
                return false;
            }

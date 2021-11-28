@@ -34,10 +34,18 @@
                           </select>                     
                         </div>
                         <div class="col-sm-4 mb-3 mb-sm-0">
+                          <label for="zona">Zona</label>
+                          <select name="zona" id="zona" class="form-control" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="Urbana">Urbana</option>
+                            <option value="Rural">Rural</option>                       
+                          </select>                     
+                        </div>
+                        <div class="col-sm-4 mb-3 mb-sm-0">
                           <label for="telefono">Teléfono</label>
                             <input type="text" name="telefono" class="form-control form-control-user" required id="telefono" placeholder="">
                         </div>
-                        <div class="col-sm-8 mb-3 mb-sm-0">
+                        <div class="col-sm-12 mb-3 mb-sm-0">
                           <label for="direccion">Direccion</label>
                             <input type="text" name="direccion" class="form-control form-control-user" required id="direccion" placeholder="">
                         </div> 

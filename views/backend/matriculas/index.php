@@ -34,7 +34,9 @@
                       <th>Grado</th>
                       <th>Sección</th>
                       <th>Materias</th>
-                      <th>Opciones</th>
+                      <th>Editar Alumno</th>
+                      <th>Edutar Docente</th>
+                      <th>Borrar Matricula</th>
                     </tr>
                   </thead>
                   <tfoot>
@@ -45,9 +47,10 @@
                       <th>Fecha de Na.</th>
                       <th>Grado</th>
                       <th>Sección</th>
-                      <th>Materias</th>
-           
-                      <th>Opciones</th>
+                      <th>Materias</th>           
+                      <th>Editar Alumno</th>
+                      <th>Edutar Docente</th>
+                      <th>Borrar Matricula</th>
                     </tr>
                   </tfoot>
                   <tbody>
@@ -55,20 +58,21 @@
                   $i = 1;
                   foreach($this->model->Listar() as $item){  ?>                
                     <tr>
-                      <td><?php echo $i; ?></td>
+                      <td><?php  echo $i; ?></td>
                       <td><?php  echo $item->nombres." ". $item->apellidos; ?></td>
                       <td><?php  echo $item->genero; ?></td>
                       <td><?php  echo $item->fechanacimiento; ?></td>                
                       <td><?php  echo $item->nombregrado; ?></td>
                       <td><?php  echo $item->seccion; ?></td>
                       <td><?php  echo $item->materias; ?></td>
-                            
-
-                      <td>
-                          
-                        <a href="?view=Matriculas&action=Editar&id=<?php echo $item->id;?>" class="btn btn-primary btn-circle"> <i class="fas fa-pencil-alt" data-toggle="tooltip" data-placement="left" title="Editar Registro"></i></a>
-                        <a href="?view=Matriculas&action=Borrar&id=<?php echo $item->id;?>" class="btn btn-danger btn-circle" data-toggle="tooltip" data-placement="right" title="Borrar Registro"> <i class="fas fa-trash"></i></a>
+                      <td>                          
+                        <a href="?view=Alumnos&action=Editar&id=<?php echo $item->id;?>" class="btn btn-primary ">Editar Alumno</a>
                       </td>
+                      <td>
+                        <a href="?view=Matriculas&action=Editar&id=<?php echo $item->idmatricula;?>" class="btn btn-success ">Editar Matricula</a>
+                      </td>
+                      <td>                        
+                        <a href="?view=Matriculas&action=Borrar&id=<?php echo $item->id;?>" class="btn btn-danger " data-toggle="tooltip" data-placement="right" title="Borrar Registro"> <i class="fas fa-trash"></i></a></td>
                     </tr>
                 <?php $i++;} ?>
                   </tbody>

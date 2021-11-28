@@ -16,6 +16,7 @@
                     <div class="form-group row">
 
                         <input type="hidden" name="matriculaid" id="matriculaid" value="<?php echo $id; ?>" />
+                        <input type="hidden" name="zona" id="zona" value="<?php echo $zona; ?>" />
 
                         <div class="col-sm-4 mb-3 mb-sm-0">
                           <label for="nombres">Nombres</label>
