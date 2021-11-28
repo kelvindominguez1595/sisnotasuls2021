@@ -42,8 +42,8 @@ class Matriculas{
     // Metodo para listar los roles
     public function Listar(){
         try{        
-            $commd = $this->DB->prepare("CALL listar_secciones()");
-            $commd->execute();
+            $commd = $this->DB->prepare("CALL listar_alumnosdocentes(?)");
+            $commd->execute(array($_SESSION['user_id']));
             return $commd->fetchAll(PDO::FETCH_OBJ);
         }catch(Throwable $t){
             die($t->getMessage());

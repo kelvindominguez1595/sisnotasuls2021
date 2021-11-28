@@ -28,28 +28,24 @@
                   <thead>
                     <tr>                       
                       <th>#</th>
-                      <th>Materia</th>
+                      <th>Nombre Completo</th>
+                      <th>Genero</th>
+                      <th>Fecha de Na.</th>
                       <th>Grado</th>
                       <th>Sección</th>
-                      <?php 
-                        if($_SESSION['roles_id'] == 1){
-                          echo "<th>Docente</th>";
-                        }
-                      ?>
+                      <th>Materias</th>
                       <th>Opciones</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                       <th>#</th>
-                      <th>Materia</th>
+                      <th>Nombre Completo</th>
+                      <th>Genero</th>
+                      <th>Fecha de Na.</th>
                       <th>Grado</th>
                       <th>Sección</th>
-                      <?php 
-                        if($_SESSION['roles_id'] == 1){
-                          echo "<th>Docente</th>";
-                        }
-                      ?>
+                      <th>Materias</th>
            
                       <th>Opciones</th>
                     </tr>
@@ -60,14 +56,14 @@
                   foreach($this->model->Listar() as $item){  ?>                
                     <tr>
                       <td><?php echo $i; ?></td>
-                      <td><?php  echo $item->materia; ?></td>
+                      <td><?php  echo $item->nombres." ". $item->apellidos; ?></td>
+                      <td><?php  echo $item->genero; ?></td>
+                      <td><?php  echo $item->fechanacimiento; ?></td>                
                       <td><?php  echo $item->nombregrado; ?></td>
                       <td><?php  echo $item->seccion; ?></td>
-                      <?php 
-                        if($_SESSION['roles_id'] == 1){
-                          echo "<td>".$item->usuario."</td>";
-                        }
-                      ?>
+                      <td><?php  echo $item->materias; ?></td>
+                            
+
                       <td>
                           
                         <a href="?view=Matriculas&action=Editar&id=<?php echo $item->id;?>" class="btn btn-primary btn-circle"> <i class="fas fa-pencil-alt" data-toggle="tooltip" data-placement="left" title="Editar Registro"></i></a>

@@ -100,7 +100,7 @@ class Alumnos{
     public function SesionesMessage($texto, $tipo){
         $_SESSION['texto'] = $texto;
         $_SESSION['tipo'] = $tipo;
-        header("Location: ?view=Alumnos");
+        header("Location: ?view=Matriculas");
     }
 
 }
