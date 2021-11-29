@@ -54,7 +54,7 @@ class Alumnos{
     // Metodo para obtener un registro en especifico
     public function obtenerRegistro($id){
         try{        
-            $commd = $this->DB->prepare("CALL search_secciones(?)");
+            $commd = $this->DB->prepare("CALL search_alumno(?)");
             $commd->execute(array($id));
             return $commd->fetch(PDO::FETCH_OBJ);
         }catch(Throwable $t){
@@ -66,10 +66,10 @@ class Alumnos{
     public function actualizar($data){
         try{
             // Comando SQL
-            $sql = "CALL actualizar_secciones(?,?)";
+            $sql = "CALL actualizar_alumnos(?,?,?,?,?,?,?)";
             // COMENZAMOS LA CONEXION CON PDO
             $pre = $this->DB->prepare($sql);
-            $resul = $pre->execute(array($data->id, $data->nombre));
+            $resul = $pre->execute(array($data->id, $data->nombres, $data->apellidos, $data->genero, $data->fechanac, $data->seccionid, $data->gradoid));
             if($resul > 0){ 
                 return true;
             }else{ 

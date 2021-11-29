@@ -65,7 +65,7 @@ class AlumnosController{
         $this->model->matriculaid = $_REQUEST['matriculaid'];
         $this->model->seccionid = $_REQUEST['seccionid'];
         $this->model->gradoid = $_REQUEST['gradoid'];
-        $this->model->gradoid = $_REQUEST['gradoid'];
+   
 
         $this->modeluser->usuario     = $_REQUEST['nombres'];
         $this->modeluser->email       = $_REQUEST['email'];
@@ -108,7 +108,14 @@ class AlumnosController{
     public function Actualizar(){
         // capturo los valores enviados por post o get
         $this->model->id = $_REQUEST['id'];
-        $this->model->nombre = $_REQUEST['nombre'];
+        $this->model->nombres = $_REQUEST['nombres'];
+        $this->model->apellidos = $_REQUEST['apellidos'];
+        $this->model->genero = $_REQUEST['genero'];
+        $this->model->fechanac = $_REQUEST['fechanac'];
+
+        $this->model->seccionid = $_REQUEST['seccionid'];
+        $this->model->gradoid = $_REQUEST['gradoid'];
+   
 
         // utilizamos el metodo de guardar de SQL
         if($this->model->actualizar($this->model)){
