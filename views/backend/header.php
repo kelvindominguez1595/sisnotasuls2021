@@ -22,6 +22,7 @@
   include_once 'Controller/AutentificacionController.php';
   $au = new AutentificacionController();
   $au->validAuthen();
+  $datouser = $au->dataUser()->usuario;
 ?>
 <div id="wrapper">
       <!-- Sidebar -->
@@ -51,7 +52,9 @@
     <i class="fas fa-fw fa-box"></i>
     <span>Notas</span></a>
 </li>
-<li class="nav-item">
+
+<?php if($_SESSION['roles_id'] == 1){ ?>
+  <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
     <i class="fas fa-fw fa-file-pdf"></i>
     <span>Reportes</span>
@@ -59,13 +62,15 @@
   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
       <h6 class="collapse-header">Tipos de Reportes:</h6>
-      <a class="collapse-item" target="_blank" href="?view=Venta&action=ReporteVentaPDF">Ventas</a>
-      <a class="collapse-item" href="?view=Venta&action=ReporteDeProductosPDF">Almacen</a>
+      <a class="collapse-item" target="_blank" href="?view=Reportes&action=ReportePlazaDocente">Plazas Docentes</a>
+      <a class="collapse-item" target="_blank" href="?view=Reportes&action=ReporteZonaRural">Zona rural</a>
+      <a class="collapse-item" target="_blank" href="?view=Reportes&action=ReporteAlumnosreprobados">Alumnos reprobados</a>
+      <a class="collapse-item" target="_blank" href="?view=Reportes&action=ReporteMejoresPromedios">Mejores Prom.</a>
+      <a class="collapse-item" target="_blank" href="?view=Reportes&action=ReporteMateriasDocentes">Materias Docentes</a>
       <!-- <a class="collapse-item" href="cards.html">Desperfectos</a> -->
     </div>
   </div>
 </li>
-<?php if($_SESSION['roles_id'] == 1){ ?>
 <li class="nav-item">
   <a class="nav-link" href="?view=Matriculas">
     <i class="fas fa-address-book"></i>
@@ -129,8 +134,6 @@
       <!-- Nav Item - Search Dropdown (Visible Only XS) -->
 
       <!-- Nav Item - Alerts -->
-
-  
       <div class="topbar-divider d-none d-sm-block"></div>
       <!-- Nav Item - User Information -->
       <li class="nav-item dropdown no-arrow">

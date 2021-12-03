@@ -97,13 +97,8 @@ class Autentificacion
     
     public function dataUser(){
         try{        
-            $procedimiento = '';
-            if($_SESSION['roles_id'] == 3){
-                $procedimiento = 'datos_docentes';
-            }else{
-                $procedimiento = 'datos_alumnos';
-            }
-            $commd = $this->DB->prepare("CALL ".$procedimiento."(?)");
+         
+            $commd = $this->DB->prepare("CALL datos_docentes(?)");
             $commd->execute(array($_SESSION['user_id']));
             return $commd->fetch(PDO::FETCH_OBJ);
         }catch(Throwable $t){
