@@ -48,34 +48,15 @@ class NotasController{
         require_once 'views/backend/footer.php';
     }
 
-    public function Actualizar(){
-        // capturo los valores enviados por post o get
-        $materiaid = $_REQUEST['materiaid'];
-        $alumnoid = $_REQUEST['alumnoid'];
-        
-        $this->model->id = $_REQUEST['notaid'];
-        $this->model->nota = $_REQUEST['nota'];
-        $this->model->observacion = $_REQUEST['observacion'];
-
-
-        // utilizamos el metodo de guardar de SQL
-        if($this->model->actualizar($this->model)){
-            $params = "Notas&action=ActualizarNota&id=".$alumnoid."&materidi=".$materiaid;
-            $texto = "Notas guardadas correctamente";
-            $tipo = "success";
-            $this->model->SesionesMessage($texto, $tipo, $params);
-        }else{
-            $params = "Notas&action=ActualizarNota&id=".$alumnoid."&materidi=".$materiaid;
-            $texto = "Ocurrio un error";
-            $tipo = "error";
-            $this->model->SesionesMessage($texto, $tipo, $params);
-        }
-    }
-
 
     public function Borrar(){
         // Capturamos el id enviado por get
-        $id = $_REQUEST['id'];
+        $alumnoid = $_REQUEST['id'];
+        $materiaid = $_REQUEST['materidi'];
+        $notas = $this->model->obtenerRegistro($alumnoid, $materiaid);  
+        $mat = $this->materias->obtenerRegistro($materiaid);   
+        $student = $this->alumnos->obtenerRegistro($alumnoid);
+
         require_once 'views/backend/header.php';
         require_once 'views/backend/notas/borrar.php';
         require_once 'views/backend/footer.php';
@@ -113,6 +94,47 @@ class NotasController{
         }
     }
 
+    public function Actualizar(){
+        // capturo los valores enviados por post o get
+        $materiaid = $_REQUEST['materiaid'];
+        $alumnoid = $_REQUEST['alumnoid'];
+        
+        $this->model->id = $_REQUEST['notaid'];
+        $this->model->nota = $_REQUEST['nota'];
+        $this->model->observacion = $_REQUEST['observacion'];
 
+
+        // utilizamos el metodo de guardar de SQL
+        if($this->model->actualizar($this->model)){
+            $params = "Notas&action=ActualizarNota&id=".$alumnoid."&materidi=".$materiaid;
+            $texto = "Notas guardadas correctamente";
+            $tipo = "success";
+            $this->model->SesionesMessage($texto, $tipo, $params);
+        }else{
+            $params = "Notas&action=ActualizarNota&id=".$alumnoid."&materidi=".$materiaid;
+            $texto = "Ocurrio un error";
+            $tipo = "error";
+            $this->model->SesionesMessage($texto, $tipo, $params);
+        }
+    }
+
+    
+    public function BorrarNota(){
+        // capturo los valores enviados por post o get
+        $materia = $_REQUEST['materiaid'];
+        $this->model->id = $_REQUEST['notaid'];
+        // utilizamos el metodo de guardar de SQL
+        if($this->model->delete($this->model)){      
+            $params = "Notas&action=ListAlumnosMaterias&id=".$materia;      
+            $texto = "Registro borrado exitosamente";
+            $tipo = "success";
+            $this->model->SesionesMessage($texto, $tipo, $params);
+        }else{
+            $params = "Notas&action=ListAlumnosMaterias&id=".$materia;
+            $texto = "Ocurrio un error ";
+            $tipo = "error";
+            $this->model->SesionesMessage($texto, $tipo, $params);
+        }
+    }
 }
 ?>

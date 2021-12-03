@@ -110,7 +110,7 @@
                                       <a href="?view=Notas&action=ActualizarNota&id=<?php echo $item->id;?>&materidi=<?php echo $id;?>" class="btn btn-primary"> Cambiar Nota</a>
                                     </td>
                                     <td>
-                                      <a href="?view=Notas&action=ActualizarNota&id=<?php echo $item->id;?>&materidi=<?php echo $id;?>" class="btn btn-danger"> Borrar Nota</a>
+                                      <a href="?view=Notas&action=Borrar&id=<?php echo $item->id;?>&materidi=<?php echo $id;?>" class="btn btn-danger"> Borrar Nota</a>
 
                                     </td>
                                     <?php
