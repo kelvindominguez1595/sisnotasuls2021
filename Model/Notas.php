@@ -1,13 +1,12 @@
 <?php
-class Materias{
+class Notas{
     # atributos 
     private $DB; // para la conexion de la base de datos
     public $id;
-    public $materia;
-    public $numeval;
-    public $descripcion;
-    public $docente;
-    public $grado;
+    public $nota;
+    public $observacion;
+    public $alumnoid;
+    public $materiaid;
 
     public function __CONSTRUCT(){
         try{
@@ -20,11 +19,10 @@ class Materias{
     public function Registrar($data){
         try{
             // Comando SQL
-            $sql = "CALL materias_insert(?,?,?,?,?)";
-
+            $sql = "CALL guardarnotas(?,?,?)";
             // COMENZAMOS LA CONEXION CON PDO
             $pre = $this->DB->prepare($sql);
-            $resul = $pre->execute(array($data->materia, $data->numeval, $data->descripcion, $data->docente, $data->grado));
+            $resul = $pre->execute(array($data->nota, $data->alumnoid, $data->materiaid));
             if($resul > 0){ 
                 return true;
             }else{ 
@@ -51,11 +49,11 @@ class Materias{
     }
 
     // Metodo para obtener un registro en especifico
-    public function obtenerRegistro($id){
+    public function obtenerRegistro($alumnoid, $materiaid){
         try{        
-            $commd = $this->DB->prepare("CALL search_materias(?)");
-            $commd->execute(array($id));
-            return $commd->fetch(PDO::FETCH_OBJ);
+            $commd = $this->DB->prepare("CALL buscar_notas(?,?)");
+            $commd->execute(array($alumnoid, $materiaid));
+            return $commd->fetchAll(PDO::FETCH_OBJ);
         }catch(Throwable $t){
             die($t->getMessage());
         }
@@ -65,10 +63,10 @@ class Materias{
     public function actualizar($data){
         try{
             // Comando SQL
-            $sql = "CALL actualizar_materias(?,?,?,?,?,?)";
+            $sql = "CALL update_notas(?,?,?)";
             // COMENZAMOS LA CONEXION CON PDO
             $pre = $this->DB->prepare($sql);
-            $resul = $pre->execute(array($data->id, $data->materia, $data->numeval, $data->descripcion, $data->docente, $data->grado));
+            $resul = $pre->execute(array($data->id, $data->nota, $data->observacion));
             if($resul > 0){ 
                 return true;
             }else{ 
@@ -82,7 +80,7 @@ class Materias{
     public function delete($data){
         try{
             // Comando SQL
-            $sql = "CALL eliminar_materias(?)";
+            $sql = "CALL borrar_nota(?)";
             // COMENZAMOS LA CONEXION CON PDO
             $pre = $this->DB->prepare($sql);
             $resul = $pre->execute(array($data->id));
@@ -95,11 +93,16 @@ class Materias{
             die($t->getMessage());
         }
     }
-    // Para los mensajes
-    public function SesionesMessage($texto, $tipo){
+   // Para los mensajes
+   public function SesionesMessage($texto, $tipo, $params){
         $_SESSION['texto'] = $texto;
         $_SESSION['tipo'] = $tipo;
-        header("Location: ?view=Materias");
+        if($params != ""){
+            $params;
+        } else {
+            $params = "Notas";
+        }
+        header("Location: ?view=".$params);
     }
 
     function randomColor(){
@@ -123,7 +126,38 @@ class Materias{
         $str .= $randNum;
         }
         return $str;
-       }
+    }
 
+    // obtener registro 
+    public function ListarMatalumnos($data){
+        try {
+            $commd = $this->DB->prepare("CALL listar_materiasusuario(?)");
+            $commd->execute(array($data));
+            return $commd->fetchAll(PDO::FETCH_OBJ);
+        } catch(Throwable $t) {
+            die($t->getMessage());
+        }
+    }
+
+    // obtener la cantidad  de notas calificadas 
+    public function CountNotas($alumid, $mateid){
+        try {
+            $commd = $this->DB->prepare("CALL countnotasalumnos(?,?)");
+            $commd->execute(array($alumid, $mateid));
+            return $commd->fetch(PDO::FETCH_OBJ);
+        } catch(Throwable $t) {
+            die($t->getMessage());
+        }
+    }
+    // obtener los valores de la nota 
+    public function ValNotas($alumid, $mateid){
+        try {
+            $commd = $this->DB->prepare("CALL notasEstudiantes(?,?)");
+            $commd->execute(array($alumid, $mateid));
+            return $commd->fetchAll(PDO::FETCH_OBJ);
+        } catch(Throwable $t) {
+            die($t->getMessage());
+        }
+    }
 }
 ?>

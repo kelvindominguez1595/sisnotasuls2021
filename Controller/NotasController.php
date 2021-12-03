@@ -1,26 +1,20 @@
 <?php
 // importamos nuestro modelo
+require_once 'Model/Notas.php';
+require_once 'Model/Materias.php';
 require_once 'Model/Alumnos.php';
-require_once 'Model/Grados.php';
-require_once 'Model/Secciones.php';
-require_once 'Model/Usuarios.php';
-require_once 'Model/Direcciones.php';
 
 class NotasController{
     // para accender al modelo y sus atributos
     private $model;
-    private $modelgrado;
-    private $modelseccion;
-    private $modeluser;
-    private $diremodel;
+    private $materias;
+    private $alumnos;
 
     // Constructos
     public function __CONSTRUCT(){
-        $this->model = new Alumnos();
-        $this->modelseccion = new Secciones();
-        $this->modelgrado = new Grados();
-        $this->modeluser = new Usuarios();
-        $this->diremodel = new Direcciones();
+        $this->model = new Notas();
+        $this->materias = new Materias();
+        $this->alumnos = new Alumnos();
     }
 
    /** Inicio de llamado de la vistas */
@@ -29,23 +23,56 @@ class NotasController{
         require_once 'views/backend/notas/index.php';
         require_once 'views/backend/footer.php';
     }
-    public function Nuevo(){
-        $id = $_REQUEST['id'];
-        $zona = $_REQUEST['zona'];
-        require_once 'views/backend/header.php';
-        require_once 'views/backend/notas/crear.php';
-        require_once 'views/backend/footer.php';
-    }
-
-    public function Editar(){
+  
+    public function ListAlumnosMaterias(){
         // Capturamos el id enviado por get
         $id = $_REQUEST['id'];
         // crear el metodo para listar un dato especifico
-        $data = $this->model->obtenerRegistro($id);
+        $alum = $this->model->ListarMatalumnos($id);
+        $materia = $this->materias->obtenerRegistro($id);    
+            
+        require_once 'views/backend/header.php';
+        require_once 'views/backend/notas/listarnotas.php';
+        require_once 'views/backend/footer.php';
+    }
+
+    public function ActualizarNota(){
+        // Capturamos el id enviado por get
+        $alumnoid = $_REQUEST['id'];
+        $materiaid = $_REQUEST['materidi'];
+        $notas = $this->model->obtenerRegistro($alumnoid, $materiaid);  
+        $mat = $this->materias->obtenerRegistro($materiaid);   
+        $student = $this->alumnos->obtenerRegistro($alumnoid);
         require_once 'views/backend/header.php';
         require_once 'views/backend/notas/editar.php';
         require_once 'views/backend/footer.php';
     }
+
+    public function Actualizar(){
+        // capturo los valores enviados por post o get
+        $materiaid = $_REQUEST['materiaid'];
+        $alumnoid = $_REQUEST['alumnoid'];
+        
+        $this->model->id = $_REQUEST['notaid'];
+        $this->model->nota = $_REQUEST['nota'];
+        $this->model->observacion = $_REQUEST['observacion'];
+
+
+        // utilizamos el metodo de guardar de SQL
+        if($this->model->actualizar($this->model)){
+            $params = "Notas&action=ActualizarNota&id=".$alumnoid."&materidi=".$materiaid;
+            $texto = "Notas guardadas correctamente";
+            $tipo = "success";
+            $this->model->SesionesMessage($texto, $tipo, $params);
+        }else{
+            $params = "Notas&action=ActualizarNota&id=".$alumnoid."&materidi=".$materiaid;
+            $texto = "Ocurrio un error";
+            $tipo = "error";
+            $this->model->SesionesMessage($texto, $tipo, $params);
+        }
+    }
+
+
     public function Borrar(){
         // Capturamos el id enviado por get
         $id = $_REQUEST['id'];
@@ -53,94 +80,36 @@ class NotasController{
         require_once 'views/backend/notas/borrar.php';
         require_once 'views/backend/footer.php';
     }
+
     /** Fin de llamado de la vistas */
-
-    /** Metodos CRUD */    
-    public function Registrar(){
-        // capturo los valores enviados por post o get
-        $this->model->nombres = $_REQUEST['nombres'];
-        $this->model->apellidos = $_REQUEST['apellidos'];
-        $this->model->genero = $_REQUEST['genero'];
-        $this->model->fechanac = $_REQUEST['fechanac'];
-        $this->model->matriculaid = $_REQUEST['matriculaid'];
-        $this->model->seccionid = $_REQUEST['seccionid'];
-        $this->model->gradoid = $_REQUEST['gradoid'];
-   
-
-        $this->modeluser->usuario     = $_REQUEST['nombres'];
-        $this->modeluser->email       = $_REQUEST['email'];
-        $this->modeluser->pass        = $_REQUEST['pass'];
- 
-
-         // utilizamos el metodo de guardar de SQL
-         $res = $this->model->Registrar($this->model);
-        if($res){
-            $this->modeluser->alumnoid  = $res;
-            $resuuser = $this->modeluser->RegistrarAlumno($this->modeluser);
-            if($resuuser){
-           
-
-                $this->diremodel->direccion = "-";
-                $this->diremodel->telefono = "-";
-                $this->diremodel->usuarioid = $resuuser;
-                $this->diremodel->zona = $_REQUEST['zona'];
-                if($this->diremodel->Registrar($this->diremodel)){
-                    $texto = "Registro exitosamente";
-                    $tipo = "success";
-                    $this->model->SesionesMessage($texto, $tipo);
-                } else{
-                    $texto = "Ocurrio un error";
-                    $tipo = "error";
-                    $this->model->SesionesMessage($texto, $tipo);
-                }
-            }else {
-                $texto = "Ocurrio un error";
-                $tipo = "error";
-                $this->model->SesionesMessage($texto, $tipo);
+    public function obtenerNotas(){
+        $materiaid = $_REQUEST['materiaid'];
+        try {           
+            $params = "Notas&action=ListAlumnosMaterias&id=".$materiaid;
+            // recorremos el array muldimensional creado de las notas 
+            foreach ($_REQUEST['alumnoid'] as $alumno => $value) {
+                // obtengo lo identificadores de los alumnos
+               // echo "<br>Este es el alumno ".$value;
+                $alumnoid = $value;                
+                foreach ($_REQUEST['nota'.$value] as $key => $nota) {
+                    // obtengo las notas de cada estudiante
+                    if(!empty($nota)){
+                        $this->model->nota = $nota;
+                        $this->model->alumnoid = $alumnoid;
+                        $this->model->materiaid = $materiaid;
+                        $this->model->Registrar($this->model);
+                    }
+                }    
             }
-        }else{
-            $texto = "Ocurrio un error";
-            $tipo = "error";
-            $this->model->SesionesMessage($texto, $tipo);
-        }
-    }
-
-    public function Actualizar(){
-        // capturo los valores enviados por post o get
-        $this->model->id = $_REQUEST['id'];
-        $this->model->nombres = $_REQUEST['nombres'];
-        $this->model->apellidos = $_REQUEST['apellidos'];
-        $this->model->genero = $_REQUEST['genero'];
-        $this->model->fechanac = $_REQUEST['fechanac'];
-
-        $this->model->seccionid = $_REQUEST['seccionid'];
-        $this->model->gradoid = $_REQUEST['gradoid'];
-   
-
-        // utilizamos el metodo de guardar de SQL
-        if($this->model->actualizar($this->model)){
-            $texto = "Actualizó exitosamente";
+            $texto = "Notas guardadas correctamente";
             $tipo = "success";
-            $this->model->SesionesMessage($texto, $tipo);
-        }else{
-            $texto = "Ocurrio un error";
+            $this->model->SesionesMessage($texto, $tipo, $params);
+        } catch (\Throwable $th) {
+            //throw $th;
+            $params = "Notas&action=ListAlumnosMaterias&id=".$materiaid;
+            $texto = "Ocurrio un error message: ".$th;
             $tipo = "error";
-            $this->model->SesionesMessage($texto, $tipo);
-        }
-    }
-
-    public function BorrarId(){
-        // capturo los valores enviados por post o get
-        $this->model->id = $_REQUEST['id'];
-        // utilizamos el metodo de guardar de SQL
-        if($this->model->delete($this->model)){            
-            $texto = "Registro borrado exitosamente";
-            $tipo = "success";
-            $this->model->SesionesMessage($texto, $tipo);
-        }else{
-            $texto = "Ocurrio un error ";
-            $tipo = "error";
-            $this->model->SesionesMessage($texto, $tipo);
+            $this->model->SesionesMessage($texto, $tipo, $params);
         }
     }
 

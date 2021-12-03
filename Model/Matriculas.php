@@ -122,7 +122,6 @@ class Matriculas{
         } else {
             $params = "Matriculas";
         }
-
         header("Location: ?view=".$params);
     }
 
