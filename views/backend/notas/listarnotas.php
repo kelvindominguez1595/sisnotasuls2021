@@ -40,7 +40,7 @@
                       ?>         
                       <th>Promedio</th>
                       <?php 
-                        if($_SESSION['roles_id'] == 2){
+                        if($_SESSION['roles_id'] == 1){
                           echo "<th>Editar</th> <th>Borrar</th>";
                         }
                       ?>
@@ -58,7 +58,7 @@
                       ?>    
                       <th>Promedio</th>
                       <?php 
-                        if($_SESSION['roles_id'] == 2){
+                        if($_SESSION['roles_id'] == 1){
                           echo "<th>Editar</th> <th>Borrar</th>";
                         }
                       ?>
@@ -104,7 +104,7 @@
                                     
                                     </td>
                                     <?php 
-                                      if($_SESSION['roles_id'] == 2){
+                                      if($_SESSION['roles_id'] == 1){
                                     ?>
                                     <td>
                                       <a href="?view=Notas&action=ActualizarNota&id=<?php echo $item->id;?>&materidi=<?php echo $id;?>" class="btn btn-primary"> Cambiar Nota</a>

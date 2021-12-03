@@ -44,9 +44,7 @@
 <!-- Divider -->
 <hr class="sidebar-divider">
 <!-- Heading -->
-<div class="sidebar-heading">
-  Interface
-</div>
+
 <!-- Nav Item - Pages Collapse Menu -->
 <li class="nav-item">
   <a class="nav-link" href="?view=Notas">
@@ -54,15 +52,26 @@
     <span>Notas</span></a>
 </li>
 <li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+    <i class="fas fa-fw fa-file-pdf"></i>
+    <span>Reportes</span>
+  </a>
+  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">Tipos de Reportes:</h6>
+      <a class="collapse-item" target="_blank" href="?view=Venta&action=ReporteVentaPDF">Ventas</a>
+      <a class="collapse-item" href="?view=Venta&action=ReporteDeProductosPDF">Almacen</a>
+      <!-- <a class="collapse-item" href="cards.html">Desperfectos</a> -->
+    </div>
+  </div>
+</li>
+<?php if($_SESSION['roles_id'] == 1){ ?>
+<li class="nav-item">
   <a class="nav-link" href="?view=Matriculas">
     <i class="fas fa-address-book"></i>
     <span>Matricula</span></a>
 </li>
-<!-- <li class="nav-item">
-  <a class="nav-link" href="?view=Comentarios">
-    <i class="fas fa-fw fa-comment-alt"></i>
-    <span>Comentarios</span></a>
-</li> -->
+
 <li class="nav-item">
   <a class="nav-link" href="?view=Usuarios">
     <i class="fas fa-fw fa-user"></i>
@@ -78,20 +87,7 @@
     <i class="fas fa-fw fa-user-astronaut"></i>
     <span>Clientes</span></a>
 </li> -->
-<li class="nav-item">
-  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-    <i class="fas fa-fw fa-file-pdf"></i>
-    <span>Reportes</span>
-  </a>
-  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-    <div class="bg-white py-2 collapse-inner rounded">
-      <h6 class="collapse-header">Tipos de Reportes:</h6>
-      <a class="collapse-item" target="_blank" href="?view=Venta&action=ReporteVentaPDF">Ventas</a>
-      <a class="collapse-item" href="?view=Venta&action=ReporteDeProductosPDF">Almacen</a>
-      <!-- <a class="collapse-item" href="cards.html">Desperfectos</a> -->
-    </div>
-  </div>
-</li>
+
 <!-- Nav Item - Utilities Collapse Menu -->
 <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
@@ -108,6 +104,7 @@
     </div>
   </div>
 </li>
+<?php } ?>
 <!-- Divider -->
 <hr class="sidebar-divider d-none d-md-block">
 <!-- Sidebar Toggler (Sidebar) -->
